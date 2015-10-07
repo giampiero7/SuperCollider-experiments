@@ -1,20 +1,22 @@
-b = NetAddr.new("127.0.0.1", 7771);    // create the NetAddr
-b.sendMsg("/hello", "there");
-
-
-
-
+NetAddr.langPort;
 (
 f = { |msg, time, addr|
-    if(msg[0] == '/telegram') {
+    if(msg[0] == '/telegram-text') {
 		msg[1].postln;
-		("say -v 'Vicki' '" + msg[1] + "'").unixCmd;
-    }
+		("say -v 'Vicki' \"" + msg[1] + "\"").unixCmd;
+    };
+
+    if(msg[0] == '/telegram-notes') {
+		for (1, msg.size - 1, { arg i; msg[i].postln });
+	};
 };
-thisProcess.addOSCRecvFunc(f);
 )
 
-NetAddr.langPort;
-
-// stop posting.
 thisProcess.removeOSCRecvFunc(f);
+thisProcess.addOSCRecvFunc(f);
+
+
+
+
+
+
